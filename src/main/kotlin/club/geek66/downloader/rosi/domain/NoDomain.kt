@@ -11,7 +11,6 @@ import javax.persistence.*
  */
 @Entity
 class NoDomain : IdGetter {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "customGenerator")
 	@GenericGenerator(name = "customGenerator", strategy = "club.geek66.downloader.rosi.domain.DomainIdentityGenerator")
@@ -19,14 +18,10 @@ class NoDomain : IdGetter {
 
 	@Enumerated(EnumType.STRING)
 	lateinit var type: RosiEntryType
-
 	lateinit var coverUrl: String
 
 	// http://rs.jinyemimi.com/jpg/3154-tBxfldMb
 	lateinit var urlPrefix: String
-
 	var quantity: Int = -1
-
 	var downloaded: Boolean = false
-
 }

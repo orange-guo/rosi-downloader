@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service
  */
 @Service
 class NoService(private val downloadService: NoDownloadService, private val pullService: NoPullService) {
-
 	fun fastPull() {
 		pullService.fastPull()
 	}
@@ -26,5 +25,4 @@ class NoService(private val downloadService: NoDownloadService, private val pull
 	fun downloadAll() {
 		downloadService.downloadAll();
 	}
-
 }

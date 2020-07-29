@@ -16,36 +16,32 @@ import org.springframework.stereotype.Service
  */
 @Service
 class NoPullService(private val client: RosiClient, private val repository: NoRepository) : AbstractLoggable() {
-
 	private final val getPage: (Int) -> Page<NoEntry> = client::getNoPage
 
 	fun pullAll() {
 		Pager.doByDesc(getPage = getPage, consumePage = {
 			it.content.parallelStream()
-					.map(NoEntry::convertToDomain)
-					.filter { !repository.existsById(it.id) }
-					.forEach {
-						logger.info("Save {}", it.id)
-						repository.save(it)
-					}
+				.map(NoEntry::convertToDomain)
+				.filter { !repository.existsById(it.id) }
+				.forEach {
+					logger.info("Save {}", it.id)
+					repository.save(it)
+				}
 			true
 		})
 	}
-
 	/*fun pull(id: Int) {
 		client.getNoPage()
 	}*/
-
 	fun fastPull() {
-		Pager.doByAsc(getPage=getPage, consumePage= {
+		Pager.doByAsc(getPage = getPage, consumePage = {
 			it.content.parallelStream()
-					.map(NoEntry::convertToDomain)
-					.filter { !repository.existsById(it.id) }
-					.map {
-						logger.info("Save {}", it.id)
-						repository.save(it)
-					}.count() != 0L
+				.map(NoEntry::convertToDomain)
+				.filter { !repository.existsById(it.id) }
+				.map {
+					logger.info("Save {}", it.id)
+					repository.save(it)
+				}.count() != 0L
 		})
 	}
-
 }

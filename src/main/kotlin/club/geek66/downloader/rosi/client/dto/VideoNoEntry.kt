@@ -11,19 +11,13 @@ import org.apache.commons.lang.StringUtils
  * @copyright: Copyright 2020 by orange
  */
 class VideoNoEntry(
-
-		val id: Int,
-
-		val title: String,
-
-		@JsonProperty("litpic")
-		val coverUrl: String,
-
-		@JsonProperty("softlinks")
-		val videoUrl: String
-
+	val id: Int,
+	val title: String,
+	@JsonProperty("litpic")
+	val coverUrl: String,
+	@JsonProperty("softlinks")
+	val videoUrl: String
 ) {
-
 	fun convert(): VideoNoDomain {
 		val index: String = StringUtils.substringAfter(this.title, "VIDEO.NO.")
 		return VideoNoDomain().also {
@@ -32,5 +26,4 @@ class VideoNoEntry(
 			it.coverUrl = this.coverUrl
 		}
 	}
-
 }

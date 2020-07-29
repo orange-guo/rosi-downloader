@@ -13,15 +13,11 @@ var TYPE_ALL = "t"
 var TYPE_VIDEO = "r"
 
 data class EntryPageRequest(
-		val controller: String = "archives",
-
-		val action: String = "Sort",
-
-		val page: Int = 1,
-
-		val type: String = "r",
-
-		val bid: Int = 1
+	val controller: String = "archives",
+	val action: String = "Sort",
+	val page: Int = 1,
+	val type: String = "r",
+	val bid: Int = 1
 )
 
 /**
@@ -30,16 +26,14 @@ data class EntryPageRequest(
  * @time: 下午9:55
  * @copyright: Copyright 2020 by orange
  */
-data class EntryPageResponse<T> (
-		@JsonProperty("current_page")
-		override val currentPage: Int,
-
-		@JsonProperty("total_page")
-		override val totalPage: Int,
-
-		@JsonProperty("entries_s")
-		override val content: Set<T>
-): Page<T>
+data class EntryPageResponse<T>(
+	@JsonProperty("current_page")
+	override val currentPage: Int,
+	@JsonProperty("total_page")
+	override val totalPage: Int,
+	@JsonProperty("entries_s")
+	override val content: Set<T>
+) : Page<T>
 
 /**
  * @author: orange
@@ -48,11 +42,8 @@ data class EntryPageResponse<T> (
  * @copyright: Copyright 2020 by orange
  */
 data class EntryRequest(
-		val controller: String = "archives",
-
-		val action: String = "getArchiveD",
-
-		val token: String? = null,
-
-		val aid: Int? = null
+	val controller: String = "archives",
+	val action: String = "getArchiveD",
+	val token: String? = null,
+	val aid: Int? = null
 )

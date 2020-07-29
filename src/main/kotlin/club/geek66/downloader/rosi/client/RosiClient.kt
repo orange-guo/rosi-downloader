@@ -23,41 +23,37 @@ import java.util.stream.Collectors
 @Component
 @Suppress(names = ["NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS"])
 class RosiClient(private val template: RestTemplate, private val mapper: ObjectMapper) : AbstractLoggable() {
-
 	fun login(username: String, password: String): String {
 		return doPost(
-				LoginRequest(userId = username, password = password),
-				object : TypeReference<LoginResponse>() {}
+			LoginRequest(userId = username, password = password),
+			object : TypeReference<LoginResponse>() {}
 		).token
 	}
 
 	fun getNoPage(pageNo: Int): EntryPageResponse<NoEntry> {
 		val pageResponse: EntryPageResponse<NoEntry> = doPost(
-				EntryPageRequest(type = TYPE_ALL, page = pageNo),
-				object : TypeReference<EntryPageResponse<NoEntry>>() {}
+			EntryPageRequest(type = TYPE_ALL, page = pageNo),
+			object : TypeReference<EntryPageResponse<NoEntry>>() {}
 		)
-
 		val content: Set<NoEntry> = pageResponse.content
-				.stream()
-				.filter { it.title.startsWith("NO.") }
-				.filter { StringUtils.isNumeric(it.quantity) }
-				.collect(Collectors.toSet())
+			.stream()
+			.filter { it.title.startsWith("NO.") }
+			.filter { StringUtils.isNumeric(it.quantity) }
+			.collect(Collectors.toSet())
 		return pageResponse.copy(content = content)
-
 	}
 
 	fun getVideoNoPage(pageNo: Int, token: String): EntryPageResponse<VideoNoEntry> {
 		val page: EntryPageResponse<VideoNoEntry> = doPost(
-				EntryPageRequest(type = TYPE_VIDEO, page = pageNo),
-				object : TypeReference<EntryPageResponse<VideoNoEntry>>() {}
+			EntryPageRequest(type = TYPE_VIDEO, page = pageNo),
+			object : TypeReference<EntryPageResponse<VideoNoEntry>>() {}
 		)
-
 		val content: Set<VideoNoEntry> = page.content
-				.stream()
-				.filter({ it.title.startsWith("VIDEO.NO.") })
-				.filter({ StringUtils.isNumeric(StringUtils.substringAfter(it.title, "VIDEO.NO.")) })
-				.map({ getVideoNoEntry(it.id, token) })
-				.collect(Collectors.toSet())
+			.stream()
+			.filter({ it.title.startsWith("VIDEO.NO.") })
+			.filter({ StringUtils.isNumeric(StringUtils.substringAfter(it.title, "VIDEO.NO.")) })
+			.map({ getVideoNoEntry(it.id, token) })
+			.collect(Collectors.toSet())
 
 		return page.copy(content = content)
 	}
@@ -73,9 +69,9 @@ class RosiClient(private val template: RestTemplate, private val mapper: ObjectM
 				httpHeaders.contentType = MediaType.APPLICATION_JSON
 				httpHeaders.set("User-Agent", "okhttp/3.14.4")
 				val content: String = template.postForObject(
-						"http://rosi.jinyemimi.com/api_beta1_3/api.php",
-						HttpEntity(body, httpHeaders),
-						String::class.java
+					"http://rosi.jinyemimi.com/api_beta1_3/api.php",
+					HttpEntity(body, httpHeaders),
+					String::class.java
 				)
 				return mapper.readValue(content, typeReference)
 			} catch (notFound: HttpClientErrorException.NotFound) {

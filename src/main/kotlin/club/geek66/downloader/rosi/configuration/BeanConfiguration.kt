@@ -14,12 +14,10 @@ import org.springframework.web.client.RestTemplate
  */
 @Configuration
 class BeanConfiguration {
-
 	@Bean
 	fun restTemplate(): RestTemplate = SimpleClientHttpRequestFactory().let {
 		it.setReadTimeout(1000)
 		it.setConnectTimeout(1000)
 		RestTemplate()
 	}
-
 }

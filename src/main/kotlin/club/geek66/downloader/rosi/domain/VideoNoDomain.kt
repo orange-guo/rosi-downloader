@@ -14,14 +14,10 @@ import javax.persistence.Id
  */
 @Entity
 class VideoNoDomain : IdGetter {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "customGenerator")
 	@GenericGenerator(name = "customGenerator", strategy = "club.geek66.downloader.rosi.domain.DomainIdentityGenerator")
 	override var id: Int = -1
-
 	lateinit var coverUrl: String
-
 	lateinit var contentUrl: String
-
 }

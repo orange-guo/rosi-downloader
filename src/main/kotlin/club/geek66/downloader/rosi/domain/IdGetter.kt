@@ -7,7 +7,5 @@ package club.geek66.downloader.rosi.domain
  * @copyright: Copyright 2020 by orange
  */
 interface IdGetter {
-
 	var id: Int
-
 }

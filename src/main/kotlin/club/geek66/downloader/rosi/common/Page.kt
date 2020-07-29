@@ -8,11 +8,7 @@ package club.geek66.downloader.rosi.common
  * @copyright: Copyright 2020 by orange
  */
 interface Page<T> {
-
 	val currentPage: Int
-
 	val totalPage: Int
-
 	val content: Collection<T>
-
 }

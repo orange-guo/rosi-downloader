@@ -9,10 +9,9 @@ import club.geek66.downloader.rosi.common.Page
  * @copyright: Copyright 2020 by orange
  */
 object Pager {
-
 	fun <T> doByDesc(getPage: (Int) -> Page<T>, consumePage: (Page<T>) -> Boolean) {
-		var page:Page<T> = getPage(1)
-		var currentPage:Int = page.totalPage
+		var page: Page<T> = getPage(1)
+		var currentPage: Int = page.totalPage
 		while (currentPage >= 1) {
 			page = getPage(currentPage)
 			if (!consumePage(page)) {
@@ -27,7 +26,7 @@ object Pager {
 		var totalPage: Int
 
 		do {
-			val page:Page<T> = getPage(currentPage)
+			val page: Page<T> = getPage(currentPage)
 			if (!consumePage(page)) {
 				break
 			}
@@ -35,5 +34,4 @@ object Pager {
 			totalPage = page.totalPage
 		} while (currentPage <= totalPage)
 	}
-
 }
