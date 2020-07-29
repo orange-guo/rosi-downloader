@@ -1,0 +1,43 @@
+logging:
+  path: ${user.home}/.rosi-downloader/log
+
+spring:
+  datasource:
+    url: jdbc:h2:file:~/h2/rosi;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    platform: h2
+    username: sa
+    password:
+    driverClassName: org.h2.Driver
+    hikari:
+      maximum-pool-size: 32
+
+  jackson:
+    serialization:
+      INDENT_OUTPUT: true
+    deserialization:
+      FAIL_ON_UNKNOWN_PROPERTIES: false
+    property-naming-strategy: SNAKE_CASE
+  # mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+  # mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: false
+        use_sql_comments: true
+        format_sql: true
+
+  h2:
+    console:
+      enabled: true
+      path: /console
+      settings:
+        trace: false
+        web-allow-others: true
+
+rosi:
+  root-path: "/media/orange/Backup Plus/home/foo/pictures/rosi"

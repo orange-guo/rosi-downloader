@@ -1,0 +1,37 @@
+/bin/
+.vscode
+__pycache__/
+*.py[cod]
+*$py.class
+
+
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/build/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+.pydevproject
+LOG_FILE_IS_UNDEFINED*
+
+### mac os ###
+.DS_Store

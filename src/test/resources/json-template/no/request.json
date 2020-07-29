@@ -1,0 +1,7 @@
+{
+	"controller": "archives",
+	"action": "Sort",
+	"page": 1,
+	"type": "t",
+	"bid": 1
+}
