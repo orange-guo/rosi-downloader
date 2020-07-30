@@ -12,5 +12,11 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 @ConfigurationProperties(prefix = "rosi")
 class RosiProperties(
-	var rootPath: String = "", var username: String = "lock123", var password: String = "lock123"
+
+	var rootPath: String = "",
+
+	var username: String = "lock123",
+
+	var password: String = "lock123"
+
 )

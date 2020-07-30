@@ -21,4 +21,5 @@ class BeanConfiguration {
 		it.setConnectTimeout(1000)
 		RestTemplate()
 	}
+
 }

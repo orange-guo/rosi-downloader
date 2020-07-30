@@ -23,4 +23,5 @@ class DomainIdentityGenerator : IdentityGenerator() {
 		}
 		return domain.id
 	}
+
 }

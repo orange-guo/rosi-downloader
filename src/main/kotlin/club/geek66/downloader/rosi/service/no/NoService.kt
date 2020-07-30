@@ -26,4 +26,5 @@ class NoService(private val downloadService: NoDownloadService, private val pull
 	fun downloadAll() {
 		downloadService.downloadAll()
 	}
+
 }

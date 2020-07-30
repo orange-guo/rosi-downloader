@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service
  */
 @Service
 class VideoNoService(
-	private val client: RosiClient, private val repository: VideoNoRepository, private val properties: RosiProperties
+	private val client: RosiClient,
+	private val repository: VideoNoRepository,
+	private val properties: RosiProperties
 ) : AbstractLoggable() {
 
 	fun pullAll() {
@@ -27,4 +29,5 @@ class VideoNoService(
 			true
 		})
 	}
+
 }

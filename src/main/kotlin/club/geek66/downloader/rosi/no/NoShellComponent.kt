@@ -19,4 +19,5 @@ class NoShellComponent(private val service: NoService) {
 
 	@ShellMethod(key = ["no-download-all"], value = "From remote server download all Rosi-No.")
 	fun downloadAll() = service.downloadAll()
+
 }

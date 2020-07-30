@@ -27,9 +27,12 @@ data class EntryPageRequest(
  * @copyright: Copyright 2020 by orange
  */
 data class EntryPageResponse<T>(
-	@JsonProperty("current_page") override val currentPage: Int,
-	@JsonProperty("total_page") override val totalPage: Int,
-	@JsonProperty("entries_s") override val content: Set<T>
+	@JsonProperty("current_page")
+	override val currentPage: Int,
+	@JsonProperty("total_page")
+	override val totalPage: Int,
+	@JsonProperty("entries_s")
+	override val content: Set<T>
 ) : Page<T>
 
 /**

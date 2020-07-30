@@ -13,4 +13,5 @@ import org.slf4j.LoggerFactory
 abstract class AbstractLoggable : Loggable {
 
 	val logger: Logger = LoggerFactory.getLogger(this::class.java)
+
 }

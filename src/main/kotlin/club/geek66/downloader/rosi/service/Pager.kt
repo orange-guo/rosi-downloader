@@ -35,4 +35,5 @@ object Pager {
 			totalPage = page.totalPage
 		} while (currentPage <= totalPage)
 	}
+
 }

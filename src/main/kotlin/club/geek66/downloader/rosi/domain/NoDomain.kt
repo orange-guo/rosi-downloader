@@ -24,10 +24,14 @@ class NoDomain : IdGetter {
 
 	@Enumerated(EnumType.STRING)
 	lateinit var type: RosiEntryType
+
 	lateinit var coverUrl: String
 
 	// http://rs.jinyemimi.com/jpg/3154-tBxfldMb
 	lateinit var urlPrefix: String
+
 	var quantity: Int = -1
+
 	var downloaded: Boolean = false
+
 }

@@ -10,6 +10,9 @@ package club.geek66.downloader.rosi.common
 interface Page<T> {
 
 	val currentPage: Int
+
 	val totalPage: Int
+
 	val content: Collection<T>
+
 }

@@ -26,7 +26,9 @@ import java.util.stream.IntStream
 @Service
 @Suppress(names = ["NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS"])
 class NoDownloadService(
-	private val repository: NoRepository, private val template: RestTemplate, private val properties: RosiProperties
+	private val repository: NoRepository,
+	private val template: RestTemplate,
+	private val properties: RosiProperties
 ) : AbstractLoggable() {
 
 	private val formatter: DecimalFormat = DecimalFormat("000")

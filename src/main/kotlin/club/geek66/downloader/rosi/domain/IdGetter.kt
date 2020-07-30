@@ -9,4 +9,5 @@ package club.geek66.downloader.rosi.domain
 interface IdGetter {
 
 	var id: Int
+
 }
