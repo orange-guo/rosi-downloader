@@ -19,7 +19,7 @@ class NoPullService(private val client: RosiClient, private val repository: NoRe
 
 	private final val getPage: (Int) -> Page<NoEntry> = client::getNoPage
 	fun pullAll() {
-		Pager.doByDesc(getPage = getPage, consumePage = {
+		Pager.doByAsc(getPage = getPage, consumePage = {
 			it.content.parallelStream().map(NoEntry::convertToDomain).filter { !repository.existsById(it.id) }.forEach {
 				logger.info("Save {}", it.id)
 				repository.save(it)
