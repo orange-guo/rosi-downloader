@@ -1,4 +1,4 @@
-package club.geek66.downloader.rosi.service
+package club.geek66.downloader.rosi.service.video.service
 
 import club.geek66.downloader.rosi.common.Page
 

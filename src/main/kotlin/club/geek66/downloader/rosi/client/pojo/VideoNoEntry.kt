@@ -1,6 +1,6 @@
-package club.geek66.downloader.rosi.client.dto
+package club.geek66.downloader.rosi.client.pojo
 
-import club.geek66.downloader.rosi.domain.VideoNoDomain
+import club.geek66.downloader.rosi.service.video.domain.VideoNoDomain
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.apache.commons.lang.StringUtils
 

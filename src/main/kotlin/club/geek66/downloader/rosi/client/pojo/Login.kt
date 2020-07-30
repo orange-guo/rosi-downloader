@@ -1,4 +1,4 @@
-package club.geek66.downloader.rosi.client.dto
+package club.geek66.downloader.rosi.client.pojo
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

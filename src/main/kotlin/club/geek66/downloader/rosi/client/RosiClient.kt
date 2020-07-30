@@ -1,14 +1,14 @@
 package club.geek66.downloader.rosi.client
 
-import club.geek66.downloader.rosi.client.dto.EntryPageRequest
-import club.geek66.downloader.rosi.client.dto.EntryPageResponse
-import club.geek66.downloader.rosi.client.dto.EntryRequest
-import club.geek66.downloader.rosi.client.dto.LoginRequest
-import club.geek66.downloader.rosi.client.dto.LoginResponse
-import club.geek66.downloader.rosi.client.dto.NoEntry
-import club.geek66.downloader.rosi.client.dto.TYPE_ALL
-import club.geek66.downloader.rosi.client.dto.TYPE_VIDEO
-import club.geek66.downloader.rosi.client.dto.VideoNoEntry
+import club.geek66.downloader.rosi.client.pojo.EntryPageRequest
+import club.geek66.downloader.rosi.client.pojo.EntryPageResponse
+import club.geek66.downloader.rosi.client.pojo.EntryRequest
+import club.geek66.downloader.rosi.client.pojo.LoginRequest
+import club.geek66.downloader.rosi.client.pojo.LoginResponse
+import club.geek66.downloader.rosi.client.pojo.NoEntry
+import club.geek66.downloader.rosi.client.pojo.TYPE_ALL
+import club.geek66.downloader.rosi.client.pojo.TYPE_VIDEO
+import club.geek66.downloader.rosi.client.pojo.VideoNoEntry
 import club.geek66.downloader.rosi.common.AbstractLoggable
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -58,9 +58,9 @@ class RosiClient(private val template: RestTemplate, private val mapper: ObjectM
 				object : TypeReference<EntryPageResponse<VideoNoEntry>>() {})
 
 		val content: Set<VideoNoEntry> = page.content.stream()
-			.filter({ it.title.startsWith("VIDEO.NO.") })
-			.filter({ StringUtils.isNumeric(StringUtils.substringAfter(it.title, "VIDEO.NO.")) })
-			.map({ getVideoNoEntry(it.id, token) })
+			.filter { it.title.startsWith("VIDEO.NO.") }
+			.filter { StringUtils.isNumeric(StringUtils.substringAfter(it.title, "VIDEO.NO.")) }
+			.map { getVideoNoEntry(it.id, token) }
 			.collect(Collectors.toSet())
 
 		return page.copy(content = content)

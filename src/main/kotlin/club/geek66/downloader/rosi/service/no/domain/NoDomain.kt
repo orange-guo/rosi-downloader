@@ -1,6 +1,6 @@
-package club.geek66.downloader.rosi.domain
+package club.geek66.downloader.rosi.service.no.domain
 
-import org.hibernate.annotations.GenericGenerator
+import club.geek66.downloader.rosi.common.IdGetter
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
@@ -18,8 +18,7 @@ import javax.persistence.Id
 class NoDomain : IdGetter {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO, generator = "customGenerator")
-	@GenericGenerator(name = "customGenerator", strategy = "club.geek66.downloader.rosi.domain.DomainIdentityGenerator")
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "domainIdentityGenerator")
 	override var id: Int = -1
 
 	@Enumerated(EnumType.STRING)

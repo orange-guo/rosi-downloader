@@ -1,6 +1,7 @@
-package club.geek66.downloader.rosi.domain
+package club.geek66.downloader.rosi.common
 
 import org.hibernate.HibernateException
+import org.hibernate.annotations.GenericGenerator
 import org.hibernate.engine.spi.SharedSessionContractImplementor
 import org.hibernate.id.IdentityGenerator
 import java.io.Serializable
@@ -11,6 +12,7 @@ import java.io.Serializable
  * @time: 22:52
  * @copyright: Copyright 2019 by 橙子
  */
+@GenericGenerator(name = "domainIdentityGenerator", strategy = "club.geek66.downloader.rosi.common.DomainIdentityGenerator")
 class DomainIdentityGenerator : IdentityGenerator() {
 
 	override fun generate(implementor: SharedSessionContractImplementor, domain: Any): Serializable {

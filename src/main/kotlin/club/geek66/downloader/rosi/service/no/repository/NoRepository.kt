@@ -1,6 +1,6 @@
-package club.geek66.downloader.rosi.repository
+package club.geek66.downloader.rosi.service.no.repository
 
-import club.geek66.downloader.rosi.domain.NoDomain
+import club.geek66.downloader.rosi.service.no.domain.NoDomain
 import org.springframework.data.jpa.repository.JpaRepository
 import javax.transaction.Transactional
 

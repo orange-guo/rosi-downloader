@@ -1,11 +1,11 @@
-package club.geek66.downloader.rosi.service.no
+package club.geek66.downloader.rosi.service.no.service
 
-import club.geek66.downloader.rosi.client.dto.EntryPageResponse
+import club.geek66.downloader.rosi.client.pojo.EntryPageResponse
 import club.geek66.downloader.rosi.common.AbstractLoggable
 import club.geek66.downloader.rosi.configuration.properties.RosiProperties
-import club.geek66.downloader.rosi.domain.NoDomain
-import club.geek66.downloader.rosi.repository.NoRepository
-import club.geek66.downloader.rosi.service.Pager
+import club.geek66.downloader.rosi.service.no.domain.NoDomain
+import club.geek66.downloader.rosi.service.no.repository.NoRepository
+import club.geek66.downloader.rosi.service.video.service.Pager
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service

@@ -1,4 +1,4 @@
-package club.geek66.downloader.rosi.service.no
+package club.geek66.downloader.rosi.service.no.service
 
 import org.springframework.stereotype.Service
 

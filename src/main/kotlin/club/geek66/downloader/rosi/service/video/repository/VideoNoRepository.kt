@@ -1,6 +1,6 @@
-package club.geek66.downloader.rosi.repository
+package club.geek66.downloader.rosi.service.video.repository
 
-import club.geek66.downloader.rosi.domain.VideoNoDomain
+import club.geek66.downloader.rosi.service.video.domain.VideoNoDomain
 import org.springframework.data.jpa.repository.JpaRepository
 
 /**

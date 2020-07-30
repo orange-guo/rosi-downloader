@@ -1,4 +1,4 @@
-package club.geek66.downloader.rosi.domain
+package club.geek66.downloader.rosi.service.no.domain
 
 /**
  * @author: orange

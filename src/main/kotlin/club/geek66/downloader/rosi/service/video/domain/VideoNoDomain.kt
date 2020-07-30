@@ -1,6 +1,6 @@
-package club.geek66.downloader.rosi.domain
+package club.geek66.downloader.rosi.service.video.domain
 
-import org.hibernate.annotations.GenericGenerator
+import club.geek66.downloader.rosi.common.IdGetter
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -16,8 +16,7 @@ import javax.persistence.Id
 class VideoNoDomain : IdGetter {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO, generator = "customGenerator")
-	@GenericGenerator(name = "customGenerator", strategy = "club.geek66.downloader.rosi.domain.DomainIdentityGenerator")
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "domainIdentityGenerator")
 	override var id: Int = -1
 
 	lateinit var coverUrl: String
