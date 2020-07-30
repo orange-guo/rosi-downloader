@@ -15,13 +15,14 @@ import org.springframework.stereotype.Service
  * @copyright: Copyright 2020 by orange
  */
 @Service
-class VideoNoService(private val client: RosiClient, private val repository: VideoNoRepository, private val properties: RosiProperties) : AbstractLoggable() {
+class VideoNoService(
+	private val client: RosiClient, private val repository: VideoNoRepository, private val properties: RosiProperties
+) : AbstractLoggable() {
+
 	fun pullAll() {
 		val token: String = client.login(username = properties.username, password = properties.password)
 		Pager.doByDesc(getPage = { client.getVideoNoPage(pageNo = it, token = token) }, consumePage = {
-			it.content.parallelStream()
-				.map(VideoNoEntry::convert)
-				.filter { !repository.existsById(it.id) }
+			it.content.parallelStream().map(VideoNoEntry::convert).filter { !repository.existsById(it.id) }
 				.forEach { logger.info("Save " + it.id) }
 			true
 		})

@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner
 @Rollback(false)
 @RunWith(SpringRunner::class)
 class NoDomainTest {
+
 	@Autowired
 	lateinit var pullService: NoPullService
 

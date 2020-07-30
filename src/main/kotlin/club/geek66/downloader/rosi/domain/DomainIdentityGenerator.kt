@@ -12,6 +12,7 @@ import java.io.Serializable
  * @copyright: Copyright 2019 by 橙子
  */
 class DomainIdentityGenerator : IdentityGenerator() {
+
 	override fun generate(implementor: SharedSessionContractImplementor, domain: Any): Serializable {
 		if (domain !is IdGetter) {
 			throw HibernateException(NullPointerException())

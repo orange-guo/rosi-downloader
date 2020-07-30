@@ -9,6 +9,7 @@ import club.geek66.downloader.rosi.common.Page
  * @copyright: Copyright 2020 by orange
  */
 object Pager {
+
 	fun <T> doByDesc(getPage: (Int) -> Page<T>, consumePage: (Page<T>) -> Boolean) {
 		var page: Page<T> = getPage(1)
 		var currentPage: Int = page.totalPage

@@ -1,7 +1,12 @@
 package club.geek66.downloader.rosi.domain
 
 import org.hibernate.annotations.GenericGenerator
-import javax.persistence.*
+import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
 
 /**
  * @author: 橙子
@@ -11,6 +16,7 @@ import javax.persistence.*
  */
 @Entity
 class NoDomain : IdGetter {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "customGenerator")
 	@GenericGenerator(name = "customGenerator", strategy = "club.geek66.downloader.rosi.domain.DomainIdentityGenerator")

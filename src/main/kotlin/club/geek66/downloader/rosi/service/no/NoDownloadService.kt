@@ -25,39 +25,34 @@ import java.util.stream.IntStream
  */
 @Service
 @Suppress(names = ["NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS"])
-class NoDownloadService(private val repository: NoRepository, private val template: RestTemplate, private val properties: RosiProperties) : AbstractLoggable() {
-	private val formatter: DecimalFormat = DecimalFormat("000")
+class NoDownloadService(
+	private val repository: NoRepository, private val template: RestTemplate, private val properties: RosiProperties
+) : AbstractLoggable() {
 
+	private val formatter: DecimalFormat = DecimalFormat("000")
 	fun downloadAll() {
-		Pager.doByDesc(
-			getPage = { currentPage: Int ->
-				// jpa start from 0
-				val jpaCurrentPage: Int = currentPage - 1
-				PageRequest.of(jpaCurrentPage, 10, Sort.by("id"))
-					.let(repository::findAll)
-					.let {
-						EntryPageResponse(
-							currentPage = currentPage,
-							totalPage = it.totalPages,
-							content = it.content.toSet()
-						)
-					}
-			},
-			consumePage = {
-				logger.info(
-					"Entry page {}/{} download start with entries {}",
-					it.currentPage, it.totalPage,
-					it.content.stream().map(NoDomain::id::get).collect(Collectors.toList()).toString()
+		Pager.doByDesc(getPage = { currentPage: Int ->
+			// jpa start from 0
+			val jpaCurrentPage: Int = currentPage - 1
+			PageRequest.of(jpaCurrentPage, 10, Sort.by("id")).let(repository::findAll).let {
+				EntryPageResponse(
+					currentPage = currentPage, totalPage = it.totalPages, content = it.content.toSet()
 				)
-				it.content.parallelStream().forEach(::download)
-				logger.info("Entry page {}/{} download complete", it.currentPage, it.totalPage)
-				true
 			}
-		)
+		}, consumePage = {
+			logger.info(
+				"Entry page {}/{} download start with entries {}",
+				it.currentPage,
+				it.totalPage,
+				it.content.stream().map(NoDomain::id::get).collect(Collectors.toList()).toString()
+			)
+			it.content.parallelStream().forEach(::download)
+			logger.info("Entry page {}/{} download complete", it.currentPage, it.totalPage)
+			true
+		})
 	}
 
 	fun download(id: Int): Unit = repository.findById(id).map(::download).orElseThrow()
-
 	private fun canDownload(domain: NoDomain): Boolean {
 		val entryRootPath: Path = getEntryRootPath(domain)
 		if (!Files.exists(entryRootPath)) {
@@ -101,7 +96,7 @@ class NoDownloadService(private val repository: NoRepository, private val templa
 			return
 		}
 
-		(0..9).forEach {
+		(0 .. 9).forEach { _ ->
 			try {
 				val bytes: ByteArray = getEntryImage(domain, index)
 				Files.write(imagePath, bytes)

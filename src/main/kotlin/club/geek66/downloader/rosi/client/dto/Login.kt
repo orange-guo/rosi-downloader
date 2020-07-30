@@ -9,10 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
  * @copyright: Copyright 2019 by 橙子
  */
 data class LoginRequest(
-	val controller: String = "member",
-	val action: String = "userLogin",
-	val userId: String,
-	val password: String
+	val controller: String = "member", val action: String = "userLogin", val userId: String, val password: String
 )
 
 /**
@@ -22,7 +19,5 @@ data class LoginRequest(
  * @copyright: Copyright 2020 by orange
  */
 data class LoginResponse(
-	@JsonProperty("mid")
-	val id: Int,
-	val token: String
+	@JsonProperty("mid") val id: Int, val token: String
 )

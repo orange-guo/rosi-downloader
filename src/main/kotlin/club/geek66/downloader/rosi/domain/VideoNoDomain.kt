@@ -14,6 +14,7 @@ import javax.persistence.Id
  */
 @Entity
 class VideoNoDomain : IdGetter {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "customGenerator")
 	@GenericGenerator(name = "customGenerator", strategy = "club.geek66.downloader.rosi.domain.DomainIdentityGenerator")

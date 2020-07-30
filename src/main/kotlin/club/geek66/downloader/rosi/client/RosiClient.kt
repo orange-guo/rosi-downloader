@@ -1,6 +1,14 @@
 package club.geek66.downloader.rosi.client
 
-import club.geek66.downloader.rosi.client.dto.*
+import club.geek66.downloader.rosi.client.dto.EntryPageRequest
+import club.geek66.downloader.rosi.client.dto.EntryPageResponse
+import club.geek66.downloader.rosi.client.dto.EntryRequest
+import club.geek66.downloader.rosi.client.dto.LoginRequest
+import club.geek66.downloader.rosi.client.dto.LoginResponse
+import club.geek66.downloader.rosi.client.dto.NoEntry
+import club.geek66.downloader.rosi.client.dto.TYPE_ALL
+import club.geek66.downloader.rosi.client.dto.TYPE_VIDEO
+import club.geek66.downloader.rosi.client.dto.VideoNoEntry
 import club.geek66.downloader.rosi.common.AbstractLoggable
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -23,37 +31,26 @@ import java.util.stream.Collectors
 @Component
 @Suppress(names = ["NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS"])
 class RosiClient(private val template: RestTemplate, private val mapper: ObjectMapper) : AbstractLoggable() {
+
 	fun login(username: String, password: String): String {
-		return doPost(
-			LoginRequest(userId = username, password = password),
-			object : TypeReference<LoginResponse>() {}
-		).token
+		return doPost(LoginRequest(userId = username, password = password),
+			object : TypeReference<LoginResponse>() {}).token
 	}
 
 	fun getNoPage(pageNo: Int): EntryPageResponse<NoEntry> {
-		val pageResponse: EntryPageResponse<NoEntry> = doPost(
-			EntryPageRequest(type = TYPE_ALL, page = pageNo),
-			object : TypeReference<EntryPageResponse<NoEntry>>() {}
-		)
-		val content: Set<NoEntry> = pageResponse.content
-			.stream()
-			.filter { it.title.startsWith("NO.") }
-			.filter { StringUtils.isNumeric(it.quantity) }
-			.collect(Collectors.toSet())
+		val pageResponse: EntryPageResponse<NoEntry> = doPost(EntryPageRequest(type = TYPE_ALL, page = pageNo),
+			object : TypeReference<EntryPageResponse<NoEntry>>() {})
+		val content: Set<NoEntry> = pageResponse.content.stream().filter { it.title.startsWith("NO.") }
+			.filter { StringUtils.isNumeric(it.quantity) }.collect(Collectors.toSet())
 		return pageResponse.copy(content = content)
 	}
 
 	fun getVideoNoPage(pageNo: Int, token: String): EntryPageResponse<VideoNoEntry> {
-		val page: EntryPageResponse<VideoNoEntry> = doPost(
-			EntryPageRequest(type = TYPE_VIDEO, page = pageNo),
-			object : TypeReference<EntryPageResponse<VideoNoEntry>>() {}
-		)
-		val content: Set<VideoNoEntry> = page.content
-			.stream()
-			.filter({ it.title.startsWith("VIDEO.NO.") })
+		val page: EntryPageResponse<VideoNoEntry> = doPost(EntryPageRequest(type = TYPE_VIDEO, page = pageNo),
+			object : TypeReference<EntryPageResponse<VideoNoEntry>>() {})
+		val content: Set<VideoNoEntry> = page.content.stream().filter({ it.title.startsWith("VIDEO.NO.") })
 			.filter({ StringUtils.isNumeric(StringUtils.substringAfter(it.title, "VIDEO.NO.")) })
-			.map({ getVideoNoEntry(it.id, token) })
-			.collect(Collectors.toSet())
+			.map({ getVideoNoEntry(it.id, token) }).collect(Collectors.toSet())
 
 		return page.copy(content = content)
 	}
@@ -63,15 +60,13 @@ class RosiClient(private val template: RestTemplate, private val mapper: ObjectM
 	}
 
 	private fun <T, R> doPost(body: T, typeReference: TypeReference<R>): R {
-		(0..9).forEach { _ ->
+		(0 .. 9).forEach { _ ->
 			try {
 				val httpHeaders = HttpHeaders()
 				httpHeaders.contentType = MediaType.APPLICATION_JSON
 				httpHeaders.set("User-Agent", "okhttp/3.14.4")
 				val content: String = template.postForObject(
-					"http://rosi.jinyemimi.com/api_beta1_3/api.php",
-					HttpEntity(body, httpHeaders),
-					String::class.java
+					"http://rosi.jinyemimi.com/api_beta1_3/api.php", HttpEntity(body, httpHeaders), String::class.java
 				)
 				return mapper.readValue(content, typeReference)
 			} catch (notFound: HttpClientErrorException.NotFound) {

@@ -15,18 +15,15 @@ data class NoEntry(
 	// NO.3148
 	val title: String,
 	// http://2020.jinyemimi.com/2020/3147.rosi
-	@JsonProperty("litpic")
-	val coverUrl: String,
+	@JsonProperty("litpic") val coverUrl: String,
 	// http://rs.jinyemimi.com/jpg/
-	@JsonProperty("cdn")
-	val baseUrl: String,
+	@JsonProperty("cdn") val baseUrl: String,
 	// 3147-JFgKoBeg
-	@JsonProperty("shorttitle")
-	val subPath: String,
+	@JsonProperty("shorttitle") val subPath: String,
 	// 41
-	@JsonProperty("source")
-	val quantity: String
+	@JsonProperty("source") val quantity: String
 ) {
+
 	fun convertToDomain(): NoDomain {
 		return NoDomain().also {
 			it.id = StringUtils.substringAfter(this.title, "NO.").toInt()
@@ -36,4 +33,5 @@ data class NoEntry(
 			it.quantity = this.quantity.toInt()
 		}
 	}
+
 }

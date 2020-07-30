@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner
 @SpringBootTest
 @RunWith(SpringRunner::class)
 class VideoNoServiceTest {
+
 	@Autowired
 	private val service: VideoNoService? = null
 

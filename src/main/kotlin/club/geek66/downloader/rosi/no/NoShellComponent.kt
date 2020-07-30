@@ -13,6 +13,7 @@ import org.springframework.shell.standard.ShellMethod
  */
 @ShellComponent
 class NoShellComponent(private val service: NoService) {
+
 	@ShellMethod(key = ["no-pull-all"], value = "Form remote server pull all Rosi-No.")
 	fun pullAll() = service.pullAll()
 
