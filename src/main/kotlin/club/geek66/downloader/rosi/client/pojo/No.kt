@@ -1,7 +1,7 @@
 package club.geek66.downloader.rosi.client.pojo
 
-import club.geek66.downloader.rosi.service.no.domain.NoDomain
-import club.geek66.downloader.rosi.service.no.domain.RosiEntryType
+import club.geek66.downloader.rosi.service.NoDomain
+import club.geek66.downloader.rosi.service.RosiEntryType
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.apache.commons.lang.StringUtils
 

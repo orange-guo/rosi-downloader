@@ -1,13 +1,15 @@
-package club.geek66.downloader.rosi.service.no.service
+package club.geek66.downloader.rosi.service
 
+import club.geek66.downloader.rosi.client.RosiClient
 import club.geek66.downloader.rosi.client.pojo.EntryPageResponse
-import club.geek66.downloader.rosi.common.AbstractLoggable
-import club.geek66.downloader.rosi.configuration.properties.RosiProperties
-import club.geek66.downloader.rosi.service.no.domain.NoDomain
-import club.geek66.downloader.rosi.service.no.repository.NoRepository
-import club.geek66.downloader.rosi.service.video.service.Pager
+import club.geek66.downloader.rosi.client.pojo.NoEntry
+import club.geek66.downloader.rosi.common.*
+import org.hibernate.annotations.GenericGenerator
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.shell.standard.ShellComponent
+import org.springframework.shell.standard.ShellMethod
 import org.springframework.stereotype.Service
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
@@ -16,6 +18,57 @@ import java.nio.file.Path
 import java.text.DecimalFormat
 import java.util.stream.Collectors
 import java.util.stream.IntStream
+import javax.persistence.*
+import javax.transaction.Transactional
+
+/**
+ * @author: 橙子
+ * @date: 2019/12/10
+ * @time: 21:44
+ * @copyright: Copyright 2019 by 橙子
+ */
+@Entity
+class NoDomain : IdGetter {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "domainIdentityGenerator")
+	@GenericGenerator(name = "domainIdentityGenerator", strategy = "club.geek66.downloader.rosi.common.DomainIdentityGenerator")
+	override var id: Int = -1
+
+	@Enumerated(EnumType.STRING)
+	lateinit var type: RosiEntryType
+
+	lateinit var coverUrl: String
+
+	// http://rs.jinyemimi.com/jpg/3154-tBxfldMb
+	lateinit var urlPrefix: String
+
+	var quantity: Int = -1
+
+	var downloaded: Boolean = false
+
+}
+
+/**
+ * @author: orange
+ * @date: 2020/7/19
+ * @time: 下午6:41
+ * @copyright: Copyright 2020 by orange
+ */
+enum class RosiEntryType {
+
+	NO, KZ, YXM
+
+}
+
+/**
+ * @author: 橙子
+ * @date: 2019/12/10
+ * @time: 21:26
+ * @copyright: Copyright 2019 by 橙子
+ */
+@Transactional
+interface NoRepository : JpaRepository<NoDomain, Int>
 
 /**
  * @author: 橙子
@@ -123,3 +176,85 @@ class NoDownloadService(
 		return template.getForObject(url, ByteArray::class.java)
 	}
 }
+
+/**
+ * @author: 橙子
+ * @date: 2019/12/19
+ * @time: 21:19
+ * @copyright: Copyright 2019 by 橙子
+ */
+@Service
+class NoPullService(private val client: RosiClient, private val repository: NoRepository) : AbstractLoggable() {
+
+	private final val getPage: (Int) -> Page<NoEntry> = client::getNoPage
+	fun pullAll() {
+		Pager.doByAsc(getPage = getPage, consumePage = {
+			it.content.parallelStream().map(NoEntry::convertToDomain).filter { !repository.existsById(it.id) }.forEach {
+				logger.info("Save {}", it.id)
+				repository.save(it)
+			}
+			true
+		})
+	}
+
+	/*fun pull(id: Int) {
+		client.getNoPage()
+	}*/
+	fun fastPull() {
+		Pager.doByAsc(getPage = getPage, consumePage = {
+			it.content.parallelStream().map(NoEntry::convertToDomain).filter { !repository.existsById(it.id) }.map {
+				logger.info("Save {}", it.id)
+				repository.save(it)
+			}.count() != 0L
+		})
+	}
+}
+
+/**
+ * @author: orange
+ * @date: 2020/7/29
+ * @time: 下午11:30
+ * @copyright: Copyright 2020 by orange
+ */
+@Service
+class NoService(private val downloadService: NoDownloadService, private val pullService: NoPullService) {
+
+	fun fastPull() {
+		pullService.fastPull()
+	}
+
+	fun pullAll() {
+		pullService.pullAll()
+	}
+
+	fun download(id: Int) {
+		downloadService.download(id)
+	}
+
+	fun downloadAll() {
+		downloadService.downloadAll()
+	}
+
+}
+
+/**
+ *
+ * @author: orange
+ * @date: 2020/7/29
+ * @time: 下午11:50
+ * @copyright: Copyright 2020 by orange
+ */
+@ShellComponent
+class NoShellComponent(private val service: NoService) {
+
+	@ShellMethod(key = ["no-pull-all"], value = "Form remote server pull all Rosi-No.")
+	fun pullAll() = service.pullAll()
+
+	@ShellMethod(key = ["no-fast-pull"], value = "From remote server fast pull latest Rosi-No.")
+	fun fastPull() = service.fastPull()
+
+	@ShellMethod(key = ["no-download-all"], value = "From remote server download all Rosi-No.")
+	fun downloadAll() = service.downloadAll()
+
+}
+

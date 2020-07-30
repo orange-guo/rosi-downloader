@@ -1,7 +1,7 @@
 package club.geek66.downloader.rosi.client
 
-import club.geek66.downloader.rosi.service.no.service.NoDownloadService
-import club.geek66.downloader.rosi.service.no.service.NoPullService
+import club.geek66.downloader.rosi.service.NoDownloadService
+import club.geek66.downloader.rosi.service.NoPullService
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired

@@ -1,6 +1,4 @@
-package club.geek66.downloader.rosi.service.video.service
-
-import club.geek66.downloader.rosi.common.Page
+package club.geek66.downloader.rosi.common
 
 /**
  * @author: orange

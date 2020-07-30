@@ -1,6 +1,6 @@
 package club.geek66.downloader.rosi.service.video.service.video
 
-import club.geek66.downloader.rosi.service.video.service.VideoNoService
+import club.geek66.downloader.rosi.service.VideoNoService
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired

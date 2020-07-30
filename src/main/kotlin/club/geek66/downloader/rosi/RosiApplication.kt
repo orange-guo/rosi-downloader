@@ -2,7 +2,6 @@ package club.geek66.downloader.rosi
 
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration
 
 /**
  * @author: 橙子
@@ -10,7 +9,7 @@ import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguratio
  * @time: 22:48
  * @copyright: Copyright 2019 by 橙子
  */
-@SpringBootApplication(exclude = [WebMvcAutoConfiguration::class])
+@SpringBootApplication
 class RosiApplication
 
 fun main(args: Array<String>) {
