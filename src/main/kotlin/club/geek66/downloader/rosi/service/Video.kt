@@ -8,6 +8,8 @@ import club.geek66.downloader.rosi.common.Pager
 import club.geek66.downloader.rosi.common.RosiProperties
 import org.hibernate.annotations.GenericGenerator
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.shell.standard.ShellComponent
+import org.springframework.shell.standard.ShellMethod
 import org.springframework.stereotype.Service
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -63,5 +65,24 @@ class VideoNoService(
 			true
 		})
 	}
+
+}
+
+@ShellComponent
+class NoVideoShellComponent {
+
+	@ShellMethod(key = [], value = "132132")
+	fun downloadAll() = notSupport()
+
+	@ShellMethod(key = [], value = "132312312")
+	fun downloadById() = notSupport()
+
+	@ShellMethod(key = [], value = "132312312")
+	fun pullAll() = notSupport()
+
+	@ShellMethod(key = [], value = "2352354")
+	fun fastPull() = notSupport()
+
+	private fun notSupport() = print("Not support")
 
 }
