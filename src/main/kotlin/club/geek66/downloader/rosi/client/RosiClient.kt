@@ -9,7 +9,7 @@ import club.geek66.downloader.rosi.client.pojo.NoEntry
 import club.geek66.downloader.rosi.client.pojo.TYPE_ALL
 import club.geek66.downloader.rosi.client.pojo.TYPE_VIDEO
 import club.geek66.downloader.rosi.client.pojo.VideoNoEntry
-import club.geek66.downloader.rosi.common.Loggable
+import club.geek66.downloader.rosi.common.log.Loggable
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.commons.lang.StringUtils

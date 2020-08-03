@@ -1,12 +1,14 @@
 package club.geek66.downloader.rosi.service.no.service
 
 import club.geek66.downloader.rosi.client.pojo.EntryPageResponse
-import club.geek66.downloader.rosi.common.Loggable
 import club.geek66.downloader.rosi.common.Pager
 import club.geek66.downloader.rosi.common.RosiProperties
+import club.geek66.downloader.rosi.common.log.Loggable
+import club.geek66.downloader.rosi.common.path.EntryPathGenerator
 import club.geek66.downloader.rosi.service.no.domain.NoDomain
 import club.geek66.downloader.rosi.service.no.exception.NoException
 import club.geek66.downloader.rosi.service.no.repository.NoRepository
+import club.geek66.downloader.rosi.service.setting.service.SettingService
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
@@ -29,7 +31,9 @@ import java.util.stream.IntStream
 class NoDownloadService(
 		private val repository: NoRepository,
 		private val template: RestTemplate,
-		private val properties: RosiProperties
+		private val properties: RosiProperties,
+		private val settingService: SettingService,
+		private val pathGenerator: EntryPathGenerator
 ) : Loggable {
 
 	private val formatter: DecimalFormat = DecimalFormat("000")
@@ -58,24 +62,18 @@ class NoDownloadService(
 
 	fun download(id: Int): Unit = repository.findById(id).map(::download).orElseThrow { NoException("You must pull it before download") }
 
-	private fun canDownload(domain: NoDomain): Boolean {
-		val entryRootPath: Path = getEntryRootPath(domain)
-		if (!Files.exists(entryRootPath)) {
-			Files.createDirectories(entryRootPath)
-			return true
-		}
-
-		return !domain.downloaded
-	}
-
 	private fun download(domain: NoDomain) {
-		if (!canDownload(domain)) {
+		if (domain.downloaded) {
 			logger.info("Entry {} already exists", domain.id)
 			return
 		}
-		val rootPath: Path = getEntryRootPath(domain)
+		val entryRootPath: Path = Path.of(pathGenerator.generate(settingService.getHomeDirectory(), domain.id))
+		if (!Files.exists(entryRootPath)) {
+			Files.createDirectories(entryRootPath)
+		}
+
 		logger.info("Entry {} download start", domain.id)
-		IntStream.range(0, domain.quantity + 1).parallel().forEach { saveImg(rootPath, domain, it) }
+		IntStream.range(0, domain.quantity + 1).parallel().forEach { saveImg(entryRootPath, domain, it) }
 		logger.info("Entry {} download complete", domain.id)
 		domain.downloaded = true
 		repository.save(domain)
@@ -108,12 +106,6 @@ class NoDownloadService(
 			}
 		}
 		logger.error("Entry {} with index {} download failed", domain.id, index)
-	}
-
-	private fun getEntryRootPath(domain: NoDomain): Path {
-		val pageStart: Long = domain.id / 100 * 100.toLong()
-		val rangeString: String = pageStart.toString() + "-" + (pageStart + 100 - 1)
-		return Path.of(properties.rootPath, rangeString, domain.id.toString())
 	}
 
 	fun getEntryImage(entry: NoDomain, index: Int): ByteArray {
