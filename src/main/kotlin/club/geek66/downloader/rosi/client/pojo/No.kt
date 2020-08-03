@@ -1,7 +1,7 @@
 package club.geek66.downloader.rosi.client.pojo
 
-import club.geek66.downloader.rosi.service.NoDomain
-import club.geek66.downloader.rosi.service.RosiEntryType
+import club.geek66.downloader.rosi.service.no.domain.NoDomain
+import club.geek66.downloader.rosi.service.no.domain.NoType
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.apache.commons.lang.StringUtils
 
@@ -31,7 +31,7 @@ data class NoEntry(
 	fun convertToDomain(): NoDomain {
 		return NoDomain().also {
 			it.id = StringUtils.substringAfter(this.title, "NO.").toInt()
-			it.type = RosiEntryType.NO
+			it.type = NoType.NO
 			it.coverUrl = this.coverUrl
 			it.urlPrefix = this.baseUrl + this.subPath
 			it.quantity = this.quantity.toInt()

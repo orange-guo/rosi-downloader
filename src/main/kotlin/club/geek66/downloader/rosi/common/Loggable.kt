@@ -1,5 +1,8 @@
 package club.geek66.downloader.rosi.common
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 /**
  *
  * @author: orange
@@ -7,4 +10,7 @@ package club.geek66.downloader.rosi.common
  * @time: 下午9:15
  * @copyright: Copyright 2020 by orange
  */
-interface Loggable
+interface Loggable {
+	val logger: Logger
+		get() = LoggerFactory.getLogger(this::class.java)
+}
