@@ -1,7 +1,6 @@
 package club.geek66.downloader.rosi.service.setting.repository
 
-import club.geek66.downloader.rosi.service.setting.domain.Setting
-import io.vavr.control.Option
+import club.geek66.downloader.rosi.service.setting.domain.SettingDomain
 import org.springframework.data.jpa.repository.JpaRepository
 
 /**
@@ -11,8 +10,4 @@ import org.springframework.data.jpa.repository.JpaRepository
  * @time: 下午10:31
  * @copyright: Copyright 2020 by orange
  */
-interface SettingRepository : JpaRepository<Setting, Int> {
-
-	fun findTop1(): Option<Setting>
-
-}
+interface SettingRepository : JpaRepository<SettingDomain, Int?>

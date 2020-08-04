@@ -9,8 +9,8 @@ import club.geek66.downloader.rosi.common.log.Loggable
  * @time: 下午11:01
  * @copyright: Copyright 2020 by orange
  */
-interface EntryPathGenerator : Loggable {
+interface IdGroupNameGenerator : Loggable {
 
-	fun generate(basePath: String, entryId: Int): String
+	fun generate(id: Long): String
 
 }

@@ -1,9 +1,10 @@
 package club.geek66.downloader.rosi.service.setting.service
 
-import club.geek66.downloader.rosi.service.setting.domain.Setting
+import club.geek66.downloader.rosi.service.setting.domain.SettingDomain
 import club.geek66.downloader.rosi.service.setting.exception.SettingException
 import club.geek66.downloader.rosi.service.setting.repository.SettingRepository
 import io.vavr.control.Option
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.util.StringUtils
 import java.nio.file.Files
@@ -30,8 +31,8 @@ class SettingService(private val repository: SettingRepository) {
 				.map(Path::toAbsolutePath)
 				.map(Path::toString)
 				.flatMap { path ->
-					repository.findTop1().orElse {
-						Option.of(Setting())
+					getSetting().orElse {
+						Option.of(SettingDomain())
 					}.map {
 						it.copy(homeDirectory = path)
 					}
@@ -41,9 +42,11 @@ class SettingService(private val repository: SettingRepository) {
 	}
 
 	fun getHomeDirectory(): String =
-			repository.findTop1()
-					.map(Setting::homeDirectory::get)
+			getSetting()
+					.map(SettingDomain::homeDirectory::get)
 					.filter(StringUtils::hasText)
-					.getOrElseThrow { SettingException("Home direcotry not set") }
+					.getOrElseThrow { SettingException("Home directory not set") }
+
+	fun getSetting() = PageRequest.of(0, 1).let { repository.findAll(it) }.stream().findFirst().let { Option.ofOptional(it) }
 
 }

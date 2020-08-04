@@ -2,18 +2,20 @@ package club.geek66.downloader.rosi.service.no.service
 
 import club.geek66.downloader.rosi.client.pojo.EntryPageResponse
 import club.geek66.downloader.rosi.common.Pager
-import club.geek66.downloader.rosi.common.RosiProperties
 import club.geek66.downloader.rosi.common.log.Loggable
-import club.geek66.downloader.rosi.common.path.EntryPathGenerator
+import club.geek66.downloader.rosi.common.path.IdGroupNameGenerator
 import club.geek66.downloader.rosi.service.no.domain.NoDomain
 import club.geek66.downloader.rosi.service.no.exception.NoException
 import club.geek66.downloader.rosi.service.no.repository.NoRepository
 import club.geek66.downloader.rosi.service.setting.service.SettingService
+import io.vavr.control.Option
+import io.vavr.control.Try
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
+import java.awt.Desktop
 import java.nio.file.Files
 import java.nio.file.Path
 import java.text.DecimalFormat
@@ -31,9 +33,8 @@ import java.util.stream.IntStream
 class NoDownloadService(
 		private val repository: NoRepository,
 		private val template: RestTemplate,
-		private val properties: RosiProperties,
 		private val settingService: SettingService,
-		private val pathGenerator: EntryPathGenerator
+		private val groupNameGenerator: IdGroupNameGenerator
 ) : Loggable {
 
 	private val formatter: DecimalFormat = DecimalFormat("000")
@@ -54,46 +55,55 @@ class NoDownloadService(
 					it.totalPage,
 					it.content.stream().map(NoDomain::id::get).collect(Collectors.toList()).toString()
 			)
-			it.content.parallelStream().forEach(::download)
+			it.content.parallelStream().forEach(::downloadEntry)
 			logger.info("Entry page {}/{} download complete", it.currentPage, it.totalPage)
 			true
 		})
 	}
 
-	fun download(id: Int): Unit = repository.findById(id).map(::download).orElseThrow { NoException("You must pull it before download") }
+	fun downloadEntry(id: Int): Unit = repository.findById(id).map(::downloadEntry).orElseThrow { NoException("You must pull it before download") }
 
-	private fun download(domain: NoDomain) {
-		if (domain.downloaded) {
-			logger.info("Entry {} already exists", domain.id)
-			return
-		}
-		val entryRootPath: Path = Path.of(pathGenerator.generate(settingService.getHomeDirectory(), domain.id))
+	fun generateEntryRootPath(domain: NoDomain): Path {
+		val groupName: String = groupNameGenerator.generate(domain.id.toLong())
+		return Path.of(settingService.getHomeDirectory(), "No", groupName, domain.id.toString())
+	}
+
+	private fun downloadEntry(domain: NoDomain): Unit =
+			Option.of(domain)
+					.filter { !it.downloaded }
+					.onEmpty { logger.info("Entry {} already exists", domain.id) }
+					.map { generateEntryRootPath(it) }
+					.map { entryRootPath ->
+						createRootPath(entryRootPath)
+						logger.info("Entry {} download start", domain.id)
+						IntStream.range(0, domain.quantity + 1).parallel().forEach { downloadEntryImage(entryRootPath, domain, it) }
+						logger.info("Entry {} download complete", domain.id)
+						openFromExplorer(entryRootPath)
+					}.forEach { _ ->
+						domain.downloaded = true
+						repository.save(domain)
+					}
+
+	private fun createRootPath(entryRootPath: Path) {
 		if (!Files.exists(entryRootPath)) {
 			Files.createDirectories(entryRootPath)
 		}
-
-		logger.info("Entry {} download start", domain.id)
-		IntStream.range(0, domain.quantity + 1).parallel().forEach { saveImg(entryRootPath, domain, it) }
-		logger.info("Entry {} download complete", domain.id)
-		domain.downloaded = true
-		repository.save(domain)
-		/*try {
-			Desktop.getDesktop().open(rootPath.toFile());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
 	}
 
-	private fun pathOf(rootPath: Path, index: String): Path {
-		return Path.of(rootPath.toString(), "$index.jpg")
+	private fun openFromExplorer(entryRootPath: Path) {
+		Try.of { entryRootPath }
+				.map(Path::toFile)
+				.mapTry(Desktop.getDesktop()::open)
+				.onFailure { logger.info("Open {} from explorer failed, {}", entryRootPath, it.message) }
 	}
 
-	private fun saveImg(rootPath: Path, domain: NoDomain, index: Int) {
-		val formattedIndex: String = formatter.format(index)
-		val imagePath: Path = pathOf(rootPath, formattedIndex)
-		if (Files.exists(imagePath) || domain.id == 3079 && index > 92) {
-			return
-		}
+	private fun generateEntryImagePath(entryRootPath: Path, index: Int): Path =
+			Path.of(entryRootPath.toString(), "${formatter.format(index)}.jpg")
+
+	private fun downloadEntryImage(rootPath: Path, domain: NoDomain, index: Int) {
+		if (domain.id == 3079 && index > 92) return
+		val imagePath: Path = generateEntryImagePath(rootPath, index)
+		if (Files.exists(imagePath)) return
 
 		(0..9).forEach { _ ->
 			try {

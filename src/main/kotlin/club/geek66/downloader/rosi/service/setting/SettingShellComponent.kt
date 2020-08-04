@@ -5,7 +5,7 @@ import org.springframework.shell.standard.ShellComponent
 import org.springframework.shell.standard.ShellMethod
 
 /**
- *
+ *Setting
  * @author: orange
  * @date: 2020/8/3
  * @time: 下午10:26
@@ -16,5 +16,8 @@ class SettingShellComponent(private val service: SettingService) {
 
 	@ShellMethod(key = ["set-home-directory"], value = "Set downloader home directory.")
 	fun setHomeDirectory(homeDirectory: String) = service.setHomeDirectory(homeDirectory)
+
+	@ShellMethod(key = ["get-home-directory"], value = "Get downloader home directory.")
+	fun getHomeDirectory() = service.getHomeDirectory()
 
 }

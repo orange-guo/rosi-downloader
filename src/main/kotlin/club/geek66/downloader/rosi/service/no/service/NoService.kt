@@ -1,5 +1,6 @@
 package club.geek66.downloader.rosi.service.no.service
 
+import club.geek66.downloader.rosi.service.no.repository.NoRepository
 import org.springframework.stereotype.Service
 
 /**
@@ -9,7 +10,11 @@ import org.springframework.stereotype.Service
  * @copyright: Copyright 2020 by orange
  */
 @Service
-class NoService(private val downloadService: NoDownloadService, private val pullService: NoPullService) {
+class NoService(
+		private val downloadService: NoDownloadService,
+		private val pullService: NoPullService,
+		private val repository: NoRepository
+) {
 
 	fun fastPull() {
 		pullService.fastPull()
@@ -20,11 +25,15 @@ class NoService(private val downloadService: NoDownloadService, private val pull
 	}
 
 	fun download(id: Int) {
-		downloadService.download(id)
+		downloadService.downloadEntry(id)
 	}
 
 	fun downloadAll() {
 		downloadService.downloadAll()
+	}
+
+	fun deletePulledRecord() {
+		repository.deleteAll()
 	}
 
 }

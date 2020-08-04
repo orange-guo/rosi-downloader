@@ -11,19 +11,22 @@ import org.springframework.shell.standard.ShellMethod
  * @time: 下午11:50
  * @copyright: Copyright 2020 by orange
  */
-@ShellComponent
+@ShellComponent(value = "Operation for Rosi-No.")
 class NoShellComponent(private val service: NoService) {
 
-	@ShellMethod(key = ["no-pull-all"], value = "Form remote server pull all Rosi-No.")
-	fun pullAll() = service.pullAll()
+	@ShellMethod(value = "Form remote server pull all record of Rosi-No.")
+	fun pullAllNo() = service.pullAll()
 
-	@ShellMethod(key = ["no-fast-pull"], value = "From remote server fast pull latest Rosi-No.")
-	fun fastPull() = service.fastPull()
+	@ShellMethod(value = "From remote server fast pull latest record of Rosi-No.")
+	fun fastPullNo() = service.fastPull()
 
-	@ShellMethod(key = ["no-download-all"], value = "From remote server download all Rosi-No.")
-	fun downloadAll() = service.downloadAll()
+	@ShellMethod(value = "Download all content of Rosi-No.(Must local has all records can do it)")
+	fun downloadAllNo() = service.downloadAll()
 
-	@ShellMethod(key = ["no-download"], value = "From remote server download specific Rosi-No.")
-	fun download(id: Int) = service.download(id)
+	@ShellMethod(value = "Download content of Rosi-No by specific id(Must local has specific records can do it)")
+	fun downloadNo(id: Int) = service.download(id)
+
+	@ShellMethod(value = "Clear local pulled record of Rosi-No.(Not download content)")
+	fun deletePulledNoRecord() = service.deletePulledRecord()
 
 }
