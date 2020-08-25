@@ -1,5 +1,6 @@
 package club.geek66.downloader.rosi.service.video.shell
 
+import club.geek66.downloader.rosi.service.video.service.VideoNoService
 import org.springframework.shell.standard.ShellComponent
 import org.springframework.shell.standard.ShellMethod
 
@@ -11,7 +12,9 @@ import org.springframework.shell.standard.ShellMethod
  * @copyright: Copyright 2020 by orange
  */
 @ShellComponent
-class VideoNoShellComponent {
+class VideoNoShellComponent(
+		private val videoNoService: VideoNoService
+) {
 
 	@ShellMethod(key = [], value = "132132")
 	fun downloadAll(): Nothing = TODO("Not support")
@@ -20,7 +23,10 @@ class VideoNoShellComponent {
 	fun downloadById(): Nothing = TODO("Not support")
 
 	@ShellMethod(key = [], value = "132312312")
-	fun pullAll(): Nothing = TODO("Not support")
+	fun pullAll(): Unit = videoNoService.pullAll()
+
+	@ShellMethod(key = [], value = "Print all video no url")
+	fun printAllUrl():Unit = videoNoService.printAllUrl()
 
 	@ShellMethod(key = [], value = "2352354")
 	fun fastPull(): Nothing = TODO("Not support")

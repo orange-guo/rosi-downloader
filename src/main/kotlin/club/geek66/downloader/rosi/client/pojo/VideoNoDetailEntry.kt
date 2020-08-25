@@ -10,7 +10,14 @@ import org.apache.commons.lang.StringUtils
  * @time: 下午9:56
  * @copyright: Copyright 2020 by orange
  */
-class VideoNoEntry(
+class VideoNoSummary(
+	val id: Int,
+	val title: String,
+	@JsonProperty("litpic")
+	val coverUrl: String
+)
+
+class VideoNoDetailEntry(
 	val id: Int,
 	val title: String,
 	@JsonProperty("litpic")
